@@ -1,0 +1,8 @@
+######################################
+#          Git ignore file           #
+# https://git-scm.com/docs/gitignore #
+######################################
+
+# Editor/IDE
+.idea/
+.vscode/
