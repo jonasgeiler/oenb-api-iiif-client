@@ -158,8 +158,14 @@ for (const canvas of sequence.canvases) {
 
 	setHTML(canvasLabel, stringifyLanguageProperty(canvas.label));
 
+	canvasContainer.appendChild(newCanvas);
+
 	if (startCanvas && canvas["@id"] === startCanvas) {
 		setCurrentImage(image.resource["@id"]);
+		canvasLink.classList.add("active");
+		canvasLink.scrollIntoView({
+			block: "center",
+		});
 	}
 	window.addEventListener("hashchange", () => {
 		if (
@@ -167,10 +173,10 @@ for (const canvas of sequence.canvases) {
 			location.hash.substring("#canvas=".length) === canvas["@id"]
 		) {
 			setCurrentImage(image.resource["@id"]);
+			canvasContainer.querySelector(".canvasLink.active")?.classList.remove("active");
+			canvasLink.classList.add("active");
 		}
 	});
-
-	canvasContainer.appendChild(newCanvas);
 }
 
 // Allows zooming/inspecting the image on hover.

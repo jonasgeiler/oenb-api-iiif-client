@@ -30,6 +30,18 @@ ul.listify {
 	padding: revert;
 }
 
+.canvasLink {
+	border-radius: .75rem;
+	contain: paint;
+	border: .25rem solid transparent;
+}
+.canvasLink.active {
+	border-color: var(--primary);
+}
+.canvasLink.active .canvasLabel {
+	color: var(--primary);
+}
+
 /* Makes the canvas view zoom on hover */
 #currentImageContainer {
 	overflow: hidden;
@@ -50,8 +62,8 @@ ul.listify {
 }
 
 /* Custom helpers */
-.border-inherit {
-	border-radius: inherit;
+.border-radius-initial {
+	border-radius: initial;
 }
 .max-h-50 {
 	max-height: 50vh;
@@ -62,7 +74,4 @@ ul.listify {
 }
 .block {
 	display: block;
-}
-.rounded {
-	border-radius: .75rem;
 }
