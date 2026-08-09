@@ -1,0 +1,15 @@
+type: workspace
+model: workspace
+id: wk_JkyAm7xXbj
+createdAt: 2026-08-09T14:27:08.379042973
+updatedAt: 2026-08-09T14:27:08.379043564
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: ÖNB-API-IIIF
+encryptionKeyChallenge: null
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0
+settingDnsOverrides: []

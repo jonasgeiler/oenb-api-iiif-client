@@ -5,10 +5,13 @@ import { displayError } from "./utils/error.ts";
 import { parse as parseSchema } from "valibot";
 import { ManifestSchema } from "./lib/schemas.ts";
 import {
+	canvasContainer,
+	canvasTemplate, currentImage,
 	manifestAttribution,
 	manifestDescription,
 	manifestLabel, manifestLicense, manifestLogo, manifestMetadataBody,
-	manifestMetadataRowTemplate,
+	manifestMetadataContainer,
+	manifestMetadataRowTemplate, manifestMetadataSpace,
 	manifestSeeAlsoList, manifestSeeAlsoListItemTemplate,
 } from "./lib/elements.ts";
 import { stringifyLanguageProperty } from "./utils/language.ts";
@@ -25,26 +28,36 @@ const manifest = await fetch(manifestUrl)
 setHTML(manifestLabel, stringifyLanguageProperty(manifest.label));
 setHTML(manifestDescription, stringifyLanguageProperty(manifest.description));
 
-for (const data of manifest.metadata) {
-	const newMetadataRow = document.importNode(manifestMetadataRowTemplate.content, true);
+if (manifest.metadata?.length) {
+	for (const data of manifest.metadata) {
+		const newMetadataRow = document.importNode(
+			manifestMetadataRowTemplate.content,
+			true
+		);
 
-	const manifestMetadataLabel = newMetadataRow.querySelector(".manifestMetadataLabel");
-	if (!manifestMetadataLabel) {
-		const error = new Error(`Element with class="manifestMetadataLabel" not found inside element with id="manifestMetadataRowTemplate"`);
-		error.name = "ElementNotFoundError";
-		displayError(error);
+		const manifestMetadataLabel = newMetadataRow.querySelector(
+			".manifestMetadataLabel");
+		if (!manifestMetadataLabel) {
+			const error = new Error(`Element with class="manifestMetadataLabel" not found inside element with id="manifestMetadataRowTemplate"`);
+			error.name = "ElementNotFoundError";
+			displayError(error);
+		}
+		const manifestMetadataValue = newMetadataRow.querySelector<HTMLTableCellElement>(
+			".manifestMetadataValue");
+		if (!manifestMetadataValue) {
+			const error = new Error(`Element with class="manifestMetadataValue" not found inside element with id="manifestMetadataRowTemplate"`);
+			error.name = "ElementNotFoundError";
+			displayError(error);
+		}
+
+		setHTML(manifestMetadataLabel, stringifyLanguageProperty(data.label));
+		setHTML(manifestMetadataValue, stringifyLanguageProperty(data.value));
+
+		manifestMetadataBody.appendChild(newMetadataRow);
 	}
-	const manifestMetadataValue = newMetadataRow.querySelector<HTMLTableCellElement>(".manifestMetadataValue");
-	if (!manifestMetadataValue) {
-		const error = new Error(`Element with class="manifestMetadataValue" not found inside element with id="manifestMetadataRowTemplate"`);
-		error.name = "ElementNotFoundError";
-		displayError(error);
-	}
-
-	setHTML(manifestMetadataLabel,  stringifyLanguageProperty(data.label));
-	setHTML(manifestMetadataValue, stringifyLanguageProperty(data.value));
-
-	manifestMetadataBody.appendChild(newMetadataRow);
+} else {
+	manifestMetadataContainer.remove();
+	manifestMetadataSpace.remove();
 }
 
 if (typeof manifest.logo === "object") {
@@ -85,5 +98,71 @@ if (manifest.seeAlso) {
 		}
 
 		manifestSeeAlsoList.appendChild(newSeeAlsoItem);
+	}
+}
+
+function setCurrentImage(nativeImageURL: string) {
+	currentImage.src = nativeImageURL;
+}
+
+// TODO: For now, only the first sequence is shown.
+const sequence = manifest.sequences.shift();
+if (!sequence) {
+	const error = new Error("No sequence found in manifest");
+	error.name = "NoSequenceError";
+	displayError(error);
+}
+for (const canvas of sequence.canvases) {
+	const newCanvas = document.importNode(canvasTemplate.content, true);
+
+	const canvasCard = newCanvas.querySelector(".canvasCard");
+	if (!canvasCard) {
+		const error = new Error(`Element with class="canvasCard" not found inside element with id="canvasTemplate"`);
+		error.name = "ElementNotFoundError";
+		displayError(error);
+	}
+	const canvasImage = newCanvas.querySelector<HTMLImageElement>(".canvasImage");
+	if (!canvasImage) {
+		const error = new Error(`Element with class="canvasImage" not found inside element with id="canvasTemplate"`);
+		error.name = "ElementNotFoundError";
+		displayError(error);
+	}
+	const canvasLabel = newCanvas.querySelector<HTMLHeadingElement>(".canvasLabel");
+	if (!canvasLabel) {
+		const error = new Error(`Element with class="canvasLabel" not found inside element with id="canvasTemplate"`);
+		error.name = "ElementNotFoundError";
+		displayError(error);
+	}
+
+	// TODO: For now, only the first image is shown.
+	const image = canvas.images.pop();
+	if (!image) {
+		const error = new Error(`No image found in canvas with ID '${canvas["@id"]}'`);
+		error.name = "NoImageError";
+		displayError(error);
+	}
+
+	let imageURL = typeof image.resource.service === "string"
+		? image.resource.service
+		: image.resource.service["@id"];
+	if (!imageURL.endsWith("/")) imageURL += "/";
+	imageURL += "full/192,/0/default.jpg";
+	canvasImage.src = imageURL;
+
+	setHTML(canvasLabel, stringifyLanguageProperty(canvas.label));
+
+	let scrollIntoView = false;
+	if (canvas["@id"] === sequence.startCanvas) {
+		setCurrentImage(image.resource["@id"]);
+		scrollIntoView = true;
+	}
+	canvasCard.addEventListener("click", () => {
+		setCurrentImage(image.resource["@id"]);
+	});
+
+	canvasContainer.appendChild(newCanvas);
+
+	if (scrollIntoView) {
+		canvasCard.scrollIntoView();
 	}
 }

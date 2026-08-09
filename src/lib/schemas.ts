@@ -67,15 +67,93 @@ export const ServicePropertySchema = v.union([
 	DetailedServiceSchema,
 ]);
 
+export const ImageSchema = v.object({
+	/* Technical Properties  */
+	"@id": v.string(),
+	"@type": v.pipe(v.string(), v.value("dctypes:Image")),
+	format: OptionalString,
+	height: v.number(),
+	width: v.number(),
+
+	/* Linking Properties */
+	service: URIPropertySchema,
+});
+
+export const AnnotationSchema = v.object({
+	"@context": ContextSchema,
+
+	/* Technical Properties  */
+	"@id": v.string(),
+	"@type": v.pipe(v.string(), v.value("oa:Annotation")),
+	motivation: v.pipe(v.string(), v.value("sc:painting")),
+
+	resource: ImageSchema,
+	on: v.string(),
+});
+
+export const CanvasSchema = v.object({
+	"@context": ContextSchema,
+
+	/* Descriptive Properties */
+	label: LanguagePropertySchema,
+	metadata: v.exactOptional(v.array(v.object({
+		label: LanguagePropertySchema,
+		value: LanguagePropertySchema,
+	}))),
+	description: v.exactOptional(LanguagePropertySchema),
+
+	/* Technical Properties  */
+	"@id": v.string(),
+	"@type": v.pipe(v.string(), v.value("sc:Canvas")),
+	height: v.number(),
+	width: v.number(),
+
+	images: v.array(AnnotationSchema),
+});
+
+export const SequenceSchema = v.object({
+	"@context": ContextSchema,
+
+	/* Descriptive Properties */
+	label: v.exactOptional(LanguagePropertySchema),
+	metadata: v.exactOptional(v.array(v.object({
+		label: LanguagePropertySchema,
+		value: LanguagePropertySchema,
+	}))),
+	description: v.exactOptional(LanguagePropertySchema),
+	thumbnail: v.exactOptional(ServicePropertySchema),
+
+	/* Rights and Licensing Properties */
+	attribution: v.exactOptional(LanguagePropertySchema),
+	license: v.exactOptional(v.union([URISchema, v.array(URISchema)])),
+	logo: v.exactOptional(ServicePropertySchema),
+
+	/* Technical Properties  */
+	"@id": v.string(),
+	"@type": v.pipe(v.string(), v.value("sc:Sequence")),
+	viewingDirection: v.exactOptional(v.enum(ViewingDirection)),
+	viewingHint: v.exactOptional(v.enum(ViewingHint)),
+
+	/* Linking Properties */
+	related: v.exactOptional(RepeatableURIPropertySchema),
+	rendering: v.exactOptional(RepeatableURIPropertySchema),
+	service: v.exactOptional(RepeatableURIPropertySchema),
+	seeAlso: v.exactOptional(RepeatableURIPropertySchema),
+	within: v.exactOptional(RepeatableURIPropertySchema),
+	startCanvas: v.exactOptional(v.string()),
+
+	canvases: v.array(CanvasSchema),
+});
+
 export const ManifestSchema = v.object({
 	"@context": TopLevelContextSchema,
 
 	/* Descriptive Properties */
 	label: LanguagePropertySchema,
-	metadata: v.array(v.object({
+	metadata: v.exactOptional(v.array(v.object({
 		label: LanguagePropertySchema,
 		value: LanguagePropertySchema,
-	})),
+	}))),
 	description: LanguagePropertySchema,
 	thumbnail: v.exactOptional(ServicePropertySchema),
 
@@ -99,6 +177,6 @@ export const ManifestSchema = v.object({
 	within: v.exactOptional(RepeatableURIPropertySchema),
 
 	/* TODO Manifest Properties */
-	sequences: v.array(v.any()),
+	sequences: v.array(SequenceSchema),
 	structures: v.exactOptional(v.array(v.any())),
 });

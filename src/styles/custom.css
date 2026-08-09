@@ -30,7 +30,16 @@ ul.listify {
 	padding: revert;
 }
 
+#currentImage {
+	width: 100%;
+	object-fit: contain;
+}
+
 /* Custom helpers */
 .border-inherit {
 	border-radius: inherit;
+}
+.max-h-50 {
+	max-height: 50vh;
+	overflow-y: auto;
 }

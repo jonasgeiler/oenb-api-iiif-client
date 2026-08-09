@@ -1,0 +1,26 @@
+type: http_request
+model: http_request
+id: rq_dGUTbYgJzg
+createdAt: 2026-08-09T14:28:58.727184872
+updatedAt: 2026-08-09T14:29:11.452731653
+workspaceId: wk_JkyAm7xXbj
+folderId: null
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers:
+- enabled: true
+  name: Accept
+  value: application/ld+json
+  id: RkdudVJ2QM
+- enabled: true
+  name: ''
+  value: ''
+  id: feRaQyZwdU
+method: GET
+name: Get Manifest (json-ld)
+sortPriority: -1786285675628.999
+url: https://iiif.onb.ac.at/presentation/ABO/+Z196807705/manifest/
+urlParameters: []
