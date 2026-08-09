@@ -1,5 +1,5 @@
 {
-  "name": "oenb-api-iiif-viewer",
+  "name": "onb-api-iiif-viewer",
   "private": true,
   "type": "module",
   "scripts": {
