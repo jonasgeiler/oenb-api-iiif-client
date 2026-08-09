@@ -20,24 +20,21 @@
 	  </header>
 
 	  <main class="responsive">
-		  <div class="grid">
-			  <div id="canvasContainer" class="s3 max-h-50">
+		  <div id="currentImageContainer" class="secondary-container padding">
+			  <img id="currentImage" class="screen-50" src="" loading="eager" />
+		  </div>
 
-				  <template id="canvasTemplate">
-					  <a href="#" class="canvasLink block margin">
-						  <article class="no-padding border-radius-initial">
-							  <img class="canvasImage responsive medium" src="" loading="lazy">
-							  <div class="row absolute bottom left right padding bottom-shadow white-text">
-								  <h5 class="canvasLabel"></h5>
-							  </div>
-						  </article>
-					  </a>
-				  </template>
-
-			  </div>
-			  <div id="currentImageContainer" class="s9">
-				  <img id="currentImage" class="max-h-50" src="" loading="eager" />
-			  </div>
+		  <div id="canvasContainer" class="top-margin">
+			  <template id="canvasTemplate">
+				  <a href="#" class="canvasLink margin">
+					  <article class="no-padding border-radius-initial">
+						  <img class="canvasImage responsive medium" src="" loading="lazy">
+						  <div class="row absolute bottom left right padding bottom-shadow white-text">
+							  <h6 class="canvasLabel"></h6>
+						  </div>
+					  </article>
+				  </a>
+			  </template>
 		  </div>
 
 		  <article>

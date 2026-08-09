@@ -30,7 +30,12 @@ ul.listify {
 	padding: revert;
 }
 
+#canvasContainer {
+	white-space: nowrap;
+	overflow: auto;
+}
 .canvasLink {
+	display: inline-block;
 	border-radius: .75rem;
 	contain: paint;
 	border: .25rem solid transparent;
@@ -38,8 +43,12 @@ ul.listify {
 .canvasLink.active {
 	border-color: var(--primary);
 }
+.light .canvasLabel {
+	--primary: var(--primary-container);
+}
 .canvasLink.active .canvasLabel {
 	color: var(--primary);
+	text-decoration: underline;
 }
 
 /* Makes the canvas view zoom on hover */
@@ -57,7 +66,7 @@ ul.listify {
 	/* --mouse-pos is set by JavaScript */
 	transform-origin: var(--mouse-pos);
 }
-#currentImage:hover {
+#currentImageContainer:hover #currentImage {
 	transform: scale(3);
 }
 
@@ -65,13 +74,10 @@ ul.listify {
 .border-radius-initial {
 	border-radius: initial;
 }
-.max-h-50 {
-	max-height: 50vh;
+.screen-50 {
+	height: 50vh;
 	overflow-y: auto;
 }
 .cursor-pointer {
 	cursor: pointer;
-}
-.block {
-	display: block;
 }

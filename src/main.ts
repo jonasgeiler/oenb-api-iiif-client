@@ -172,7 +172,7 @@ for (const canvas of sequence.canvases) {
 	if (startCanvas && canvas["@id"] === startCanvas) {
 		setCurrentImage(image.resource["@id"]);
 		canvasLink.classList.add("active");
-		canvasContainer.scrollTop = canvasLink.offsetTop;
+		canvasContainer.scrollLeft = canvasLink.offsetLeft;
 	}
 	window.addEventListener("hashchange", () => {
 		if (
