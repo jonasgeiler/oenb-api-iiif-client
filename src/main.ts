@@ -1,60 +1,89 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+import "beercss";
+import "./styles/custom.css";
+import { manifestUrl } from "./lib/manifest-url.ts";
+import { displayError } from "./utils/error.ts";
+import { parse as parseSchema } from "valibot";
+import { ManifestSchema } from "./lib/schemas.ts";
+import {
+	manifestAttribution,
+	manifestDescription,
+	manifestLabel, manifestLicense, manifestLogo, manifestMetadataBody,
+	manifestMetadataRowTemplate,
+	manifestSeeAlsoList, manifestSeeAlsoListItemTemplate,
+} from "./lib/elements.ts";
+import { stringifyLanguageProperty } from "./utils/language.ts";
+import { setHTML } from "./utils/sanitize.ts";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+const manifest = await fetch(manifestUrl)
+	.then((response) => response.json())
+	.then((data) => parseSchema(ManifestSchema, data, {
+		abortEarly: true,
+		abortPipeEarly: true,
+	}))
+	.catch(displayError);
 
-<div class="ticks"></div>
+setHTML(manifestLabel, stringifyLanguageProperty(manifest.label));
+setHTML(manifestDescription, stringifyLanguageProperty(manifest.description));
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+for (const data of manifest.metadata) {
+	const newMetadataRow = document.importNode(manifestMetadataRowTemplate.content, true);
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+	const manifestMetadataLabel = newMetadataRow.querySelector(".manifestMetadataLabel");
+	if (!manifestMetadataLabel) {
+		const error = new Error(`Element with class="manifestMetadataLabel" not found inside element with id="manifestMetadataRowTemplate"`);
+		error.name = "ElementNotFoundError";
+		displayError(error);
+	}
+	const manifestMetadataValue = newMetadataRow.querySelector<HTMLTableCellElement>(".manifestMetadataValue");
+	if (!manifestMetadataValue) {
+		const error = new Error(`Element with class="manifestMetadataValue" not found inside element with id="manifestMetadataRowTemplate"`);
+		error.name = "ElementNotFoundError";
+		displayError(error);
+	}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+	setHTML(manifestMetadataLabel,  stringifyLanguageProperty(data.label));
+	setHTML(manifestMetadataValue, stringifyLanguageProperty(data.value));
+
+	manifestMetadataBody.appendChild(newMetadataRow);
+}
+
+if (typeof manifest.logo === "object") {
+	const error = new Error("Unsupported logo object");
+	error.name = "UnsupportedPropertyTypeError";
+	displayError(error);
+}
+manifestLogo.src = manifest.logo;
+const manifestAttributionStr = stringifyLanguageProperty(manifest.attribution);
+manifestLogo.alt = manifestAttributionStr + " " + manifestLogo.alt;
+setHTML(manifestAttribution, manifestAttributionStr);
+setHTML(manifestLicense, Array.isArray(manifest.license) ? manifest.license.join(", ") : manifest.license);
+
+if (manifest.seeAlso) {
+	for (const seeAlso of Array.isArray(manifest.seeAlso) ? manifest.seeAlso : [manifest.seeAlso]) {
+		const newSeeAlsoItem = document.importNode(manifestSeeAlsoListItemTemplate.content, true);
+
+		const manifestSeeAlsoLink = newSeeAlsoItem.querySelector<HTMLAnchorElement>(".manifestSeeAlsoLink");
+		if (!manifestSeeAlsoLink) {
+			const error = new Error(`Element with class="manifestSeeAlsoLink" not found inside element with id="manifestSeeAlsoListItemTemplate"`);
+			error.name = "ElementNotFoundError";
+			displayError(error);
+		}
+		const manifestSeeAlsoInfo = newSeeAlsoItem.querySelector<HTMLSpanElement>(".manifestSeeAlsoInfo");
+		if (!manifestSeeAlsoInfo) {
+			const error = new Error(`Element with class="manifestSeeAlsoInfo" not found inside element with id="manifestSeeAlsoListItemTemplate"`);
+			error.name = "ElementNotFoundError";
+			displayError(error);
+		}
+
+		const seeAlsoLink = typeof seeAlso === "string" ? seeAlso : seeAlso["@id"];
+		const seeAlsoInfo = typeof seeAlso === "string" ? undefined : seeAlso.format;
+
+		setHTML(manifestSeeAlsoLink, seeAlsoLink);
+		manifestSeeAlsoLink.href = seeAlsoLink;
+		if (seeAlsoInfo) {
+			setHTML(manifestSeeAlsoInfo, `(${seeAlsoInfo})`);
+		}
+
+		manifestSeeAlsoList.appendChild(newSeeAlsoItem);
+	}
+}

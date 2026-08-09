@@ -1,0 +1,36 @@
+/* Make code blocks scroll horizontally instead of wrapping text */
+pre {
+	overflow-x: auto;
+}
+code, pre {
+	white-space: pre;
+}
+
+/* Bring back the little arrow on <details> collapsers */
+summary {
+	list-style: revert;
+}
+summary::-webkit-details-marker {
+	display: revert;
+}
+
+/* Make the <summary> element styled as a button look properly */
+summary.button {
+	display: inline flow-root list-item;
+	line-height: var(--_size);
+}
+
+/* Styles all child links with the same styling as the .link class */
+.linkify a {
+	color: var(--primary) !important;
+}
+
+/* Styles all child list items with the default indented look */
+ul.listify {
+	padding: revert;
+}
+
+/* Custom helpers */
+.border-inherit {
+	border-radius: inherit;
+}

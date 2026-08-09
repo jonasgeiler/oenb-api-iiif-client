@@ -7,7 +7,122 @@
 	  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <main id="app"></main>
+
+	  <header class="primary bottom-margin">
+		  <nav>
+			  <h1 class="h6">ÖNB-API-IIIF Client</h1>
+			  <form class="field label prefix round inverse-primary max" id="manifestUrlForm">
+				  <i aria-hidden="true">link_2</i>
+				  <input type="url" name="manifestUrl" id="manifestUrlInput" />
+				  <label>Manifest URL</label>
+			  </form>
+		  </nav>
+	  </header>
+
+	  <main class="responsive">
+		  <div class="grid">
+			  <div class="s3">
+				  <article class="no-padding border">
+					  <img class="responsive medium" src="https://placehold.co/600x400">
+					  <div class="row absolute bottom left right padding bottom-shadow white-text border-inherit">
+						  <h5>Title</h5>
+					  </div>
+				  </article>
+
+				  <article class="no-padding border">
+					  <img class="responsive medium" src="https://placehold.co/600x400">
+					  <div class="row absolute bottom left right padding bottom-shadow white-text border-inherit">
+						  <h5>Title</h5>
+					  </div>
+				  </article>
+			  </div>
+			  <div class="s9">
+				  <h3>Pane 2</h3>
+			  </div>
+		  </div>
+
+		  <article>
+			  <h2 class="h5 linkify" id="manifestLabel">
+				  …
+			  </h2>
+			  <p class="linkify" id="manifestDescription">
+				  …
+			  </p>
+
+			  <div class="space"></div>
+
+			  <details>
+				  <summary class="button">
+					  Metadata
+				  </summary>
+				  <table class="border">
+					  <tbody id="manifestMetadataBody" class="linkify">
+
+						  <template id="manifestMetadataRowTemplate">
+							  <tr>
+								  <td><b class="manifestMetadataLabel"></b></td>
+								  <td class="manifestMetadataValue"></td>
+							  </tr>
+						  </template>
+
+					  </tbody>
+				  </table>
+			  </details>
+
+			  <div class="medium-space"></div>
+
+			  <details>
+				  <summary class="button">
+					  Rights and Licensing
+				  </summary>
+				  <div class="row">
+					  <div>
+						  <img id="manifestLogo" class="responsive" src="" alt="Logo">
+					  </div>
+					  <div class="max">
+						  <h5 class="small">Attribution</h5>
+						  <p id="manifestAttribution">
+							  …
+						  </p>
+
+						  <div class="space"></div>
+
+						  <h5 class="small">License</h5>
+						  <p>
+							  <a id="manifestLicense" href="#" class="link">
+								  …
+							  </a>
+						  </p>
+					  </div>
+				  </div>
+			  </details>
+
+			  <div class="medium-space"></div>
+
+			  <details>
+				  <summary class="button">
+					  Links
+				  </summary>
+				  <div class="top-margin">
+						<h5 class="small">See also</h5>
+					  <ul class="listify" id="manifestSeeAlsoList">
+						  <template id="manifestSeeAlsoListItemTemplate">
+							  <li>
+								  <a class="manifestSeeAlsoLink link" href="#"></a>
+								  <span class="manifestSeeAlsoInfo"></span>
+							  </li>
+						  </template>
+					  </ul>
+				  </div>
+			  </details>
+		  </article>
+	  </main>
+
+	  <dialog class="modal" id="errorModal">
+		  <h5><i class="extra" aria-hidden="true">error</i> An error occurred</h5>
+		  <pre class="error-text"><code id="errorModalTrace">(N/A)</code></pre>
+	  </dialog>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
