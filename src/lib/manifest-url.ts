@@ -1,13 +1,12 @@
 import { manifestUrlInput } from "./elements.ts";
 import { displayError } from "../utils/error.ts";
 
-const MANIFEST_URL_PARAM = "manifestUrl";
-const searchParams = new URLSearchParams(location.search);
-const searchParamsManifestUrl = searchParams.get(MANIFEST_URL_PARAM);
-
 // Default to example from https://iiif.onb.ac.at/gui/manifest.html.
 export let manifestUrl = "https://iiif.onb.ac.at/presentation/ABO/+Z196807705/manifest/";
 
+const MANIFEST_URL_PARAM = "manifestUrl";
+const searchParams = new URLSearchParams(location.search);
+const searchParamsManifestUrl = searchParams.get(MANIFEST_URL_PARAM);
 if (searchParamsManifestUrl) {
 	try {
 		// Parse as URL to validate.

@@ -46,4 +46,21 @@ Run development server:
 pnpm run dev
 ```
 
+## AI Usage Disclosure
+
+This project is human-made, with a few exceptions where I consulted
+[ChatGPT] for some design decisions or assistance with particular
+issues, as long as the information could not be quickly found elsewhere.\
+The [language utils file] is the only AI-generated part of the codebase,
+which I did to save some time. I wanted to learn about IIIF after all, not
+[RFC 4647] language tag matching algorithms.\
+However, I ensure that all AI-generated code is reviewed by a human
+before implementation.\
+To the best of my knowledge, no other AI has been used in the development
+process.\
+All code not mentioned here was written by myself.
+
 [onb-api-iiif]: https://iiif.onb.ac.at/api/
+[ChatGPT]: https://chatgpt.com/
+[language utils file]: ./src/utils/language.ts
+[RFC 4647]: https://datatracker.ietf.org/doc/html/rfc4647
