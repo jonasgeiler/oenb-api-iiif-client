@@ -187,17 +187,29 @@ for (const canvas of sequence.canvases) {
 }
 
 // Allows zooming/inspecting the image on hover.
-currentImageContainer.addEventListener("mousemove", (event) => {
+let clientX = 0;
+let clientY = 0;
+function handleMouseMoveAnimationFrame() {
 	const rect = currentImageContainer.getBoundingClientRect();
 	const x = Math.max(0, Math.min(100,
-		((event.clientX - rect.left) / rect.width) * 100
+		((clientX - rect.left) / rect.width) * 100
 	));
 	const y = Math.max(0, Math.min(100,
-		((event.clientY - rect.top) / rect.height) * 100
+		((clientY - rect.top) / rect.height) * 100
 	));
 
 	currentImageContainer.style.setProperty(
 		"--mouse-pos",
 		`${x.toFixed(1)}% ${y.toFixed(1)}%`,
 	);
+}
+let frame: number | undefined;
+currentImageContainer.addEventListener("mousemove", (event) => {
+	if (frame !== undefined) {
+		cancelAnimationFrame(frame);
+	}
+
+	clientX = event.clientX;
+	clientY = event.clientY;
+	frame = requestAnimationFrame(handleMouseMoveAnimationFrame);
 });
