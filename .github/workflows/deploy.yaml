@@ -23,7 +23,6 @@ jobs:
         shell: bash --noprofile --norc -euxo pipefail {0}
 
     permissions:
-      contents: write
       pages: write
       id-token: write
 
