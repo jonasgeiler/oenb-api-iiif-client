@@ -12,6 +12,10 @@ This project MIGHT work for other IIIF APIs, from other institutions, but I am
 mainly focusing on the [ÖNB-API-IIIF][onb-api-iiif] for now.
 Also, it is very basic by design. This is just supposed to be a weekend project.
 
+> [!TIP]
+> #### Try it out over at:
+> ### https://onb-api-iiif-viewer.jonasgeiler.com
+
 ## About [ÖNB-API-IIIF][onb-api-iiif]
 
 [ÖNB-API-IIIF][onb-api-iiif] is based on the project “Simple Access to Cultural
@@ -27,5 +31,19 @@ See also:
 - https://www.oeaw.ac.at/acdh/tools/sacha/
 
 *(Source: https://iiif.onb.ac.at/api/#_introduction)*
+
+## Local development
+
+Install dependencies:
+
+```sh
+pnpm install
+```
+
+Run development server:
+
+```sh
+pnpm run dev
+```
 
 [onb-api-iiif]: https://iiif.onb.ac.at/api/
