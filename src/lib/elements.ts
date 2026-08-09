@@ -15,6 +15,7 @@ export const manifestUrlInput = getElement<HTMLInputElement>("manifestUrlInput")
 export const canvasContainer = getElement<HTMLDivElement>("canvasContainer");
 export const canvasTemplate = getElement<HTMLTemplateElement>("canvasTemplate");
 
+export const currentImageContainer = getElement<HTMLDivElement>("currentImageContainer");
 export const currentImage = getElement<HTMLImageElement>("currentImage");
 
 export const manifestLabel = getElement<HTMLHeadingElement>("manifestLabel");

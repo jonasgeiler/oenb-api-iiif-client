@@ -6,7 +6,7 @@ import { parse as parseSchema } from "valibot";
 import { ManifestSchema } from "./lib/schemas.ts";
 import {
 	canvasContainer,
-	canvasTemplate, currentImage,
+	canvasTemplate, currentImage, currentImageContainer,
 	manifestAttribution,
 	manifestDescription,
 	manifestLabel, manifestLicense, manifestLogo, manifestMetadataBody,
@@ -102,6 +102,7 @@ if (manifest.seeAlso) {
 }
 
 function setCurrentImage(nativeImageURL: string) {
+	currentImage.src = "";
 	currentImage.src = nativeImageURL;
 }
 
@@ -112,12 +113,16 @@ if (!sequence) {
 	error.name = "NoSequenceError";
 	displayError(error);
 }
+let startCanvas = sequence.startCanvas;
+if (location.hash.startsWith("#canvas=")) {
+	startCanvas = location.hash.substring("#canvas=".length);
+}
 for (const canvas of sequence.canvases) {
 	const newCanvas = document.importNode(canvasTemplate.content, true);
 
-	const canvasCard = newCanvas.querySelector(".canvasCard");
-	if (!canvasCard) {
-		const error = new Error(`Element with class="canvasCard" not found inside element with id="canvasTemplate"`);
+	const canvasLink = newCanvas.querySelector<HTMLAnchorElement>(".canvasLink");
+	if (!canvasLink) {
+		const error = new Error(`Element with class="canvasLink" not found inside element with id="canvasTemplate"`);
 		error.name = "ElementNotFoundError";
 		displayError(error);
 	}
@@ -142,6 +147,8 @@ for (const canvas of sequence.canvases) {
 		displayError(error);
 	}
 
+	canvasLink.href = `#canvas=${canvas["@id"]}`;
+
 	let imageURL = typeof image.resource.service === "string"
 		? image.resource.service
 		: image.resource.service["@id"];
@@ -151,18 +158,35 @@ for (const canvas of sequence.canvases) {
 
 	setHTML(canvasLabel, stringifyLanguageProperty(canvas.label));
 
-	let scrollIntoView = false;
-	if (canvas["@id"] === sequence.startCanvas) {
+	if (startCanvas && canvas["@id"] === startCanvas) {
+		location.hash = `#canvas=${canvas["@id"]}`;
 		setCurrentImage(image.resource["@id"]);
-		scrollIntoView = true;
 	}
-	canvasCard.addEventListener("click", () => {
-		setCurrentImage(image.resource["@id"]);
+
+	window.addEventListener("hashchange", () => {
+		if (
+			location.hash.startsWith("#canvas=") &&
+			location.hash.substring("#canvas=".length) === canvas["@id"]
+		) {
+			setCurrentImage(image.resource["@id"]);
+		}
 	});
 
 	canvasContainer.appendChild(newCanvas);
-
-	if (scrollIntoView) {
-		canvasCard.scrollIntoView();
-	}
 }
+
+// Allows zooming/inspecting the image on hover.
+currentImageContainer.addEventListener("mousemove", (event) => {
+	const rect = currentImageContainer.getBoundingClientRect();
+	const x = Math.max(0, Math.min(100,
+		((event.clientX - rect.left) / rect.width) * 100
+	));
+	const y = Math.max(0, Math.min(100,
+		((event.clientY - rect.top) / rect.height) * 100
+	));
+
+	currentImageContainer.style.setProperty(
+		"--mouse-pos",
+		`${x.toFixed(1)}% ${y.toFixed(1)}%`,
+	);
+});

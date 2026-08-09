@@ -30,9 +30,23 @@ ul.listify {
 	padding: revert;
 }
 
+/* Makes the canvas view zoom on hover */
+#currentImageContainer {
+	overflow: hidden;
+	cursor: zoom-in;
+
+	/* Default for --mouse-pos */
+	--mouse-pos: 50% 50%;
+}
 #currentImage {
 	width: 100%;
 	object-fit: contain;
+
+	/* --mouse-pos is set by JavaScript */
+	transform-origin: var(--mouse-pos);
+}
+#currentImage:hover {
+	transform: scale(3);
 }
 
 /* Custom helpers */
@@ -42,4 +56,13 @@ ul.listify {
 .max-h-50 {
 	max-height: 50vh;
 	overflow-y: auto;
+}
+.cursor-pointer {
+	cursor: pointer;
+}
+.block {
+	display: block;
+}
+.rounded {
+	border-radius: .75rem;
 }
