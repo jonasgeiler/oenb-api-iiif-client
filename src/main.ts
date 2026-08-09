@@ -162,7 +162,7 @@ for (const canvas of sequence.canvases) {
 		? image.resource.service
 		: image.resource.service["@id"];
 	if (!imageURL.endsWith("/")) imageURL += "/";
-	imageURL += "full/192,/0/default.jpg";
+	imageURL += "full/,192/0/default.jpg";
 	canvasImage.src = imageURL;
 
 	setHTML(canvasLabel, stringifyLanguageProperty(canvas.label));
