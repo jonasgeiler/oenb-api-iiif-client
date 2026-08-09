@@ -115,7 +115,16 @@ if (!sequence) {
 }
 let startCanvas = sequence.startCanvas;
 if (location.hash.startsWith("#canvas=")) {
-	startCanvas = location.hash.substring("#canvas=".length);
+	const hashCanvas = location.hash.substring("#canvas=".length);
+	if (hashCanvas) {
+		// Check if canvas reference in hash exists.
+		for (const canvas of sequence.canvases) {
+			if (canvas["@id"] === hashCanvas) {
+				startCanvas = hashCanvas;
+				break;
+			}
+		}
+	}
 }
 for (const canvas of sequence.canvases) {
 	const newCanvas = document.importNode(canvasTemplate.content, true);
@@ -163,9 +172,7 @@ for (const canvas of sequence.canvases) {
 	if (startCanvas && canvas["@id"] === startCanvas) {
 		setCurrentImage(image.resource["@id"]);
 		canvasLink.classList.add("active");
-		canvasLink.scrollIntoView({
-			block: "center",
-		});
+		canvasContainer.scrollTop = canvasLink.offsetTop;
 	}
 	window.addEventListener("hashchange", () => {
 		if (
