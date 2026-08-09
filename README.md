@@ -1,11 +1,11 @@
-# ÖNB-API-IIIF Client
+# ÖNB-API-IIIF Viewer
 
-> A very basic client for the Austrian National Library IIIF API, so I can learn
+> A very basic viewer for the Austrian National Library IIIF API, so I can learn
 > how to use IIIF APIs.
 
 I am currently trying to learn about IIIF (International Image Interoperability
 Framework; pronounced “Triple-Eye-Eff”) and thought it would be a fun project to
-make a little client for the [ÖNB-API-IIIF][oenb-api-iiif], which is an IIIF API
+make a little viewer for the [ÖNB-API-IIIF][oenb-api-iiif], which is an IIIF API
 provided by the Austrian National Library.
 
 This project MIGHT work for other IIIF APIs, from other institutions, but I am
