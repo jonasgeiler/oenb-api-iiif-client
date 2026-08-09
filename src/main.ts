@@ -159,10 +159,8 @@ for (const canvas of sequence.canvases) {
 	setHTML(canvasLabel, stringifyLanguageProperty(canvas.label));
 
 	if (startCanvas && canvas["@id"] === startCanvas) {
-		location.hash = `#canvas=${canvas["@id"]}`;
 		setCurrentImage(image.resource["@id"]);
 	}
-
 	window.addEventListener("hashchange", () => {
 		if (
 			location.hash.startsWith("#canvas=") &&
