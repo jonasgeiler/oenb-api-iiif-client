@@ -58,7 +58,7 @@ However, I ensure that all AI-generated code is reviewed by a human
 before implementation.\
 To the best of my knowledge, no other AI has been used in the development
 process.\
-All code not mentioned here was written by myself.
+All code not mentioned here was written by myself using my wet thinking brain 🧠.
 
 [onb-api-iiif]: https://iiif.onb.ac.at/api/
 [ChatGPT]: https://chatgpt.com/
