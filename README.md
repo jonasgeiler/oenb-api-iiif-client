@@ -1,7 +1,7 @@
 # ÖNB-API-IIIF Viewer
 
-> A very basic viewer for the Austrian National Library IIIF API, so I can learn
-> how to use IIIF APIs.
+> A simple viewer for the Austrian National Library IIIF API, so I can learn
+> how to use IIIF.
 
 I am currently trying to learn about IIIF (International Image Interoperability
 Framework; pronounced “Triple-Eye-Eff”) and thought it would be a fun project to
