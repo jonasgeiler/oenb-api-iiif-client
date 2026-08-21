@@ -49,7 +49,7 @@ export function setHTML(element: Element, html: string) {
 	// @ts-expect-error For some reason there's no typing for the Sanitizer API.
 	element.setHTML(
 		// Quick fix for special first word formatting in some manifests.
-		html.replace(/<<([^>]*)>>/gi, "&lt&lt$1&gt;&gt;"),
+		html.replace(/<<([^>]*)>>/gi, "&lt;&lt;$1&gt;&gt;"),
 		{ sanitizer },
 	);
 }
