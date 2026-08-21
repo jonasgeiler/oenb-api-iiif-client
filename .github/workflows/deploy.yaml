@@ -7,26 +7,18 @@ on:
 
   workflow_dispatch:
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
-    name: Deploy
-
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    name: Build
 
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash --noprofile --norc -euxo pipefail {0}
-
-    permissions:
-      pages: write
-      id-token: write
 
     steps:
       - name: Check out repository
@@ -58,6 +50,24 @@ jobs:
         with:
           path: dist/
 
+  deploy:
+    name: Deploy
+    needs: build
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      pages: write # To deploy to Pages.
+      id-token: write # To verify the deployment originates from an appropriate source.
+
+    runs-on: ubuntu-slim # Use the more lightweight runner.
+    defaults:
+      run:
+        shell: bash --noprofile --norc -euxo pipefail {0}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5.0.0
